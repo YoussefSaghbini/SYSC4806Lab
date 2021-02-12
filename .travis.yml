@@ -4,4 +4,4 @@ jdk:
 deploy:
   provider: heroku
   api-key: $HEROKU_API_KEY
-  app: AddressBook
+  app: sysc4806labyoyo
