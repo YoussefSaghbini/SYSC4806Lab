@@ -94,7 +94,7 @@ public class AddressBook {
     public String toString(){
         String buddies = "";
         for (BuddyInfo buddyInfo: buddyList){
-            buddies += buddyInfo.toString() + "\n";
+            buddies += buddyInfo.toString();
         }
         return buddies;
     }

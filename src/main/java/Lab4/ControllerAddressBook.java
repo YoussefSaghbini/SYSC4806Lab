@@ -1,10 +1,13 @@
 package Lab4;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.annotation.HttpMethodConstraint;
 
 
 @Controller
@@ -15,10 +18,7 @@ public class ControllerAddressBook {
 
     @GetMapping(path = "/greeting")
     public String all(Model model) {
-        String all = "";
-        for(AddressBook addressBook : repositoryAddressBook.findAll())
-            all += "<br>\nAddressBook ID: " + addressBook.id + " \nBuddy Info: " + addressBook.toString() + "\n<br>";
-        model.addAttribute("AddressBook", all);
+        model.addAttribute("AddressBook", repositoryAddressBook.findAll());
         return "greeting";
     }
 
@@ -32,6 +32,7 @@ public class ControllerAddressBook {
 
     @ResponseBody
     @PostMapping(value = "/buddyadd/{id}/{name}/{phoneNumber}", consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
     public AddressBook buddyAdd(@PathVariable int id, @PathVariable String name, @PathVariable String phoneNumber){
         System.out.println("Adding Buddy...");
         AddressBook addressBook = repositoryAddressBook.findById(id);
