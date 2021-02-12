@@ -24,6 +24,7 @@ public class ControllerAddressBook {
 
     @ResponseBody
     @PostMapping("/add-addressbook")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity addAddressbook(){
         AddressBook addressBook = new AddressBook();
         repositoryAddressBook.save(addressBook);
@@ -31,8 +32,8 @@ public class ControllerAddressBook {
     }
 
     @ResponseBody
-    @PostMapping(value = "/buddyadd/{id}/{name}/{phoneNumber}", consumes = "application/json", produces = "application/json")
-    public AddressBook buddyAdd(@PathVariable int id, @PathVariable String name, @PathVariable String phoneNumber){
+    @PostMapping(value = "/buddyadd", produces = "application/json")
+    public AddressBook buddyAdd(@RequestParam(name = "id") int id, @RequestParam(name = "name") String name, @RequestParam(name = "phoneNumber") String phoneNumber){
         System.out.println("Adding Buddy...");
         AddressBook addressBook = repositoryAddressBook.findById(id);
         addressBook.addBuddy(new BuddyInfo(name, phoneNumber));
@@ -40,8 +41,9 @@ public class ControllerAddressBook {
     }
 
     @ResponseBody
-    @DeleteMapping(value = "/removebuddy/{id}/{i}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity removeBuddy(@PathVariable final int id, @RequestParam int i ){
+    @DeleteMapping(value = "/removebuddy", produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity removeBuddy(@RequestParam(name = "id") final int id, @RequestParam(name = "i") int i ){
         System.out.println("Removing Buddy...");
         AddressBook addressBook = repositoryAddressBook.findById(id);
         addressBook.removeBuddy(i);

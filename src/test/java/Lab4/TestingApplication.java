@@ -1,6 +1,7 @@
 package Lab4;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,7 +14,7 @@ import java.util.Locale;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -23,40 +24,41 @@ public class TestingApplication {
     private MockMvc mockMvc;
 
     final TestRestTemplate restTemplate = new TestRestTemplate();
-    
-    @Test
-    public void addAddressBookTest() throws Exception
-    {
-        AddressBook addressBook = new AddressBook();
-        mockMvc.perform(post("/add-addressbook/")
-                .content(asJsonString(addressBook))
+
+    @BeforeEach
+    public void addAddressBookTest() throws Exception {
+        mockMvc.perform(post("/add-addressbook")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void addBuddyInfoTest() throws Exception
+    public void addBuddyTest() throws Exception
     {
-        AddressBook addressBook = new AddressBook();
-        BuddyInfo buddy = new BuddyInfo("Test", "Number");
-        addressBook.addBuddy(buddy);
         mockMvc.perform(
-                post("/buddyadd/{id}/{name}/{phoneNumber}", "1", "Test", "Number")
+                post("/buddyadd")
+                        .param("id", "1")
+                        .param("name", "Test")
+                        .param("phoneNumber", "Number")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.buddyList[0].id").exists())
+                .andExpect(jsonPath("$.buddyList[0].name").value("Test"))
+                .andExpect(jsonPath("$.buddyList[0].phoneNumber").value("Number"));
     }
 
     @Test
     public void removeBuddyTest() throws Exception
     {
-        AddressBook addressBook = new AddressBook();
-        BuddyInfo buddy = new BuddyInfo("Test", "Number");
-        BuddyInfo buddy1 = new BuddyInfo("Test1", "Number1");
-        addressBook.addBuddy(buddy);
-        addressBook.addBuddy(buddy1);
+        addBuddyTest();
+
         mockMvc.perform(
-                post("/removebuddy/{id}/{i}", "1", "1")
+                post("/removebuddy")
+                        .param("id", "1")
+                        .param("i", "1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }
