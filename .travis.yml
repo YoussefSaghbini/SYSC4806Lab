@@ -3,5 +3,5 @@ jdk:
   - oraclejdk15
 deploy:
   provider: heroku
-  api-key: 1ad7fd7a-9c56-4b49-8256-232e51cf838e
+  api-key: $HEROKU_API_KEY
   app: AddressBook
