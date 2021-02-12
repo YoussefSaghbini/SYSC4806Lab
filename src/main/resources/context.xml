@@ -1,0 +1,10 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+        "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <!--  Run the system  -->
+    <bean id="view" class="Lab4.View"/>
+    <bean id="controller" class="Lab4.Controller" init-method="actionListeners">
+        <constructor-arg ref = "view"/>
+    </bean>
+</beans>
