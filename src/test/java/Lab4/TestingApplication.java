@@ -21,12 +21,12 @@ public class TestingApplication {
 
     final TestRestTemplate restTemplate = new TestRestTemplate();
 
-    @Test
-    public void testLocalhostResponse() throws Exception {
-
-        String message = restTemplate.getForObject("http://localhost:" + 8082 + "/", String.class);
-        org.junit.jupiter.api.Assertions.assertNotEquals("This is a test message", message);
-    }
+//    @Test
+//    public void testLocalhostResponse() throws Exception {
+//
+//        String message = restTemplate.getForObject("http://localhost:" + 8082 + "/", String.class);
+//        org.junit.jupiter.api.Assertions.assertNotEquals("This is a test message", message);
+//    }
     
     @Test
     public void addAddressBookTest() throws Exception
