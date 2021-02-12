@@ -32,7 +32,6 @@ public class ControllerAddressBook {
 
     @ResponseBody
     @PostMapping(value = "/buddyadd/{id}/{name}/{phoneNumber}", consumes = "application/json", produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
     public AddressBook buddyAdd(@PathVariable int id, @PathVariable String name, @PathVariable String phoneNumber){
         System.out.println("Adding Buddy...");
         AddressBook addressBook = repositoryAddressBook.findById(id);
