@@ -13,6 +13,7 @@ public class BuddyInfo{
 
     private String name;
     private String phoneNumber;
+    private int addressID;
 
     // Added ID
     @Id
@@ -25,16 +26,20 @@ public class BuddyInfo{
     public BuddyInfo() {
         this.name = null;
         this.phoneNumber = null;
+        this.addressID = 0;
     }
+
+
 
     /**
      * Setting the Object with their variables
      * @param name Name of Buddy
      * @param phoneNumber Phone Number of Buddy
      */
-    public BuddyInfo(String name, String phoneNumber) {
+    public BuddyInfo(int addressID, String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.addressID = addressID;
     }
 
     /**
@@ -69,14 +74,23 @@ public class BuddyInfo{
         this.phoneNumber = phoneNumber;
     }
 
+    public int getAddressID() {
+        return addressID;
+    }
+
+    public void setAddressID(int addressID) {
+        this.addressID = addressID;
+    }
+
     /**
      * String implementation of the buddy depending on gender
      * @return String of buddy information
      */
-    public String toString(){
-        return "Name: " + getName() + "\t\tPhone Number: " + getPhoneNumber();
+    @Override
+    public String toString() {
+        return String.format(
+                "[id=%d, firstName='%s', lastName='%s']", id, name, phoneNumber);
     }
-
 
     /**
      * Getting id of Buddy

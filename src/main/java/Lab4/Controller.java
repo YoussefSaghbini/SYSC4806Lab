@@ -43,9 +43,10 @@ public class Controller {
         Generate Model and being added to Controller.AddressBook and enabling more functionality
     */
     public void addItem(){
+        String id = JOptionPane.showInputDialog("Which book?");
         String name = JOptionPane.showInputDialog("What is your name?");
         String phone = JOptionPane.showInputDialog("What is your phone number?");
-        buddyList.addBuddy(new BuddyInfo(name, phone));
+        buddyList.addBuddy(new BuddyInfo(Integer.getInteger(id), name, phone));
     }
 
 

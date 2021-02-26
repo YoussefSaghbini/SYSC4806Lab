@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.annotation.HttpMethodConstraint;
+import java.util.Collection;
+import java.util.List;
 
 
 @Controller
@@ -19,25 +21,44 @@ public class ControllerAddressBook {
     @GetMapping(path = "/greeting")
     public String all(Model model) {
         model.addAttribute("AddressBook", repositoryAddressBook.findAll());
+        model.addAttribute("buddy", new BuddyInfo());
         return "greeting";
+    }
+
+    @GetMapping(path = "/size")
+    @ResponseBody
+    public Collection<AddressBook> allAddressbook() {
+        return repositoryAddressBook.findAll();
     }
 
     @ResponseBody
     @PostMapping("/add-addressbook")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity addAddressbook(){
+    public String addAddressbook(){
         AddressBook addressBook = new AddressBook();
         repositoryAddressBook.save(addressBook);
-        return ResponseEntity.ok(addressBook);
+        return "Address Book has been created!";
     }
+
 
     @ResponseBody
     @PostMapping(value = "/buddyadd", produces = "application/json")
-    public AddressBook buddyAdd(@RequestParam(name = "id") int id, @RequestParam(name = "name") String name, @RequestParam(name = "phoneNumber") String phoneNumber){
-        System.out.println("Adding Buddy...");
-        AddressBook addressBook = repositoryAddressBook.findById(id);
-        addressBook.addBuddy(new BuddyInfo(name, phoneNumber));
-        return repositoryAddressBook.save(addressBook);
+    public String buddyAdd(@ModelAttribute BuddyInfo buddy, Model model){
+        AddressBook addressBook  = repositoryAddressBook.findById(buddy.getAddressID());
+        model.addAttribute("buddy", buddy);
+        System.out.println(buddy);
+        addressBook.addBuddy(new BuddyInfo(buddy.getAddressID(), buddy.getName(), buddy.getPhoneNumber()));
+        repositoryAddressBook.save(addressBook);
+        return "Buddy has been added!";
+    }
+
+    @PostMapping(path = "/buddyadd-ajax", consumes = "application/json")
+    @ResponseBody
+    public ResponseEntity addNewBuddy(@RequestBody BuddyInfo buddy) {
+        AddressBook addressBook  = repositoryAddressBook.findById(buddy.getAddressID());
+        addressBook.addBuddy(new BuddyInfo(buddy.getAddressID(), buddy.getName(), buddy.getPhoneNumber()));
+        repositoryAddressBook.save(addressBook);
+        return ResponseEntity.ok(addressBook);
     }
 
     @ResponseBody
